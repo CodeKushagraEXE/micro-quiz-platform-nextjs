@@ -1,12 +1,13 @@
+// micro-quiz-platform-nextjs/src/app/api/categories/route.ts
 import { NextResponse } from 'next/server';
 
 const categories = [
-  { id: 'history', name: 'History', icon: '/images/history.png' },
-  { id: 'science', name: 'Science', icon: '/images/science.png' },
-  { id: 'math', name: 'Math', icon: '/images/math.png' },
-  { id: 'programming', name: 'Programming', icon: '/images/programming.png' },
+  { id: 'history', name: 'History', icon: '⏳' },
+  { id: 'science', name: 'Science', icon: '🔬' },
+  { id: 'math', name: 'Math', icon: '🧮' },
+  { id: 'programming', name: 'Programming', icon: '💻' },
 ];
 
 export async function GET() {
   return NextResponse.json(categories);
-} 
+}

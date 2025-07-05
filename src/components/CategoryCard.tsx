@@ -17,7 +17,9 @@ export default function CategoryCard({ id, name, icon, quizCount }: CategoryCard
       <div className="flex flex-col items-center justify-center gap-4">
         <div className="relative">
           <span className="inline-block rounded-full bg-gradient-to-tr from-blue-400 to-blue-600 p-4 shadow-md group-hover:scale-110 transition-transform">
-            <Image src={icon} alt={name} width={56} height={56} className="" />
+            {icon ? (
+              <span style={{ fontSize: 48, display: 'inline-block', lineHeight: 1 }}>{icon}</span>
+            ) : null}
           </span>
           {quizCount !== undefined && (
             <span className="absolute -top-2 -right-2 bg-pink-500 text-white text-xs font-bold rounded-full px-2 py-0.5 shadow-lg animate-bounce">

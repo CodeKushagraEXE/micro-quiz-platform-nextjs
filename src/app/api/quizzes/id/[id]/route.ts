@@ -65,6 +65,80 @@ const quizDetails: Record<string, any> = {
       },
     ],
   },
+  p2: {
+    id: 'p2',
+    title: 'Programming Quiz 2',
+    questions: [
+      {
+        question: 'What does CSS stand for?',
+        options: [
+          'Computer Style Sheets',
+          'Cascading Style Sheets',
+          'Creative Style Syntax',
+          'Colorful Style Sheets',
+        ],
+        answer: 1,
+      },
+      {
+        question: 'Which language runs in a web browser?',
+        options: [
+          'Java',
+          'C',
+          'Python',
+          'JavaScript',
+        ],
+        answer: 3,
+      },
+    ],
+  },
+  h2: {
+    id: 'h2',
+    title: 'History Quiz 2',
+    questions: [
+      {
+        question: 'Who was the first President of the United States?',
+        options: ['Abraham Lincoln', 'George Washington', 'Thomas Jefferson', 'John Adams'],
+        answer: 1,
+      },
+      {
+        question: 'In which year did the Berlin Wall fall?',
+        options: ['1989', '1991', '1975', '1961'],
+        answer: 0,
+      },
+    ],
+  },
+  s2: {
+    id: 's2',
+    title: 'Science Quiz 2',
+    questions: [
+      {
+        question: 'What is the chemical symbol for water?',
+        options: ['O2', 'H2O', 'CO2', 'NaCl'],
+        answer: 1,
+      },
+      {
+        question: 'What planet is known as the Morning Star?',
+        options: ['Mars', 'Venus', 'Jupiter', 'Saturn'],
+        answer: 1,
+      },
+    ],
+  },
+  m2: {
+    id: 'm2',
+    title: 'Math Quiz 2',
+    questions: [
+      {
+        question: 'What is the value of π (pi) rounded to two decimal places?',
+        options: ['3.12', '3.14', '3.16', '3.18'],
+        answer: 1,
+      },
+      {
+        question: 'What is 7 x 8?',
+        options: ['54', '56', '58', '60'],
+        answer: 1,
+      },
+    ],
+  },
 };
 
 export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
