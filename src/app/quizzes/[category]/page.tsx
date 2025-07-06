@@ -8,16 +8,9 @@ interface Quiz {
   description: string;
 }
 
-function getBaseUrl() {
-  if (typeof window !== 'undefined') return '';
-  if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`;
-  return 'http://localhost:3000';
-}
-
 async function getQuizzes(category: string) {
   try {
-    const baseUrl = getBaseUrl();
-    const res = await fetch(`${baseUrl}/api/quizzes/category/${category}`, { cache: 'no-store' });
+    const res = await fetch(`/api/quizzes/category/${category}`, { cache: 'no-store' });
     if (!res.ok) return null;
     return res.json();
   } catch (error) {

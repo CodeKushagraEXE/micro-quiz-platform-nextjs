@@ -8,16 +8,9 @@ interface Category {
   quizCount?: number;
 }
 
-function getBaseUrl() {
-  if (typeof window !== 'undefined') return '';
-  if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`;
-  return 'http://localhost:3000';
-}
-
 async function getCategoriesWithCounts(): Promise<Category[]> {
   try {
-    const baseUrl = getBaseUrl();
-    const res = await fetch(`${baseUrl}/api/categories`, {
+    const res = await fetch(`/api/categories`, {
       next: { revalidate: 60 },
     });
     if (!res.ok) throw new Error('Failed to fetch categories');
@@ -26,7 +19,7 @@ async function getCategoriesWithCounts(): Promise<Category[]> {
     const quizCounts = await Promise.all(
       categories.map(async (cat: Category) => {
         try {
-          const quizRes = await fetch(`${baseUrl}/api/quizzes/category/${cat.id}`);
+          const quizRes = await fetch(`/api/quizzes/category/${cat.id}`);
           if (!quizRes.ok) return 0;
           const quizzes = await quizRes.json();
           return quizzes.length;
