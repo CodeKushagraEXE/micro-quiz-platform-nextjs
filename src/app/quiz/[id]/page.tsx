@@ -17,9 +17,16 @@ function getBaseUrl() {
 async function getQuiz(id: string) {
   try {
     const baseUrl = getBaseUrl();
+    console.log(`Fetching quiz ${id} from ${baseUrl}/api/quizzes/id/${id}`);
     const res = await fetch(`${baseUrl}/api/quizzes/id/${id}`, { cache: 'no-store' });
-    if (!res.ok) return null;
-    return res.json();
+    console.log(`Response status: ${res.status}`);
+    if (!res.ok) {
+      console.log(`Failed to fetch quiz ${id}: ${res.status} ${res.statusText}`);
+      return null;
+    }
+    const quiz = await res.json();
+    console.log(`Quiz fetched successfully:`, quiz.title);
+    return quiz;
   } catch (error) {
     console.error(`Failed to fetch quiz ${id}:`, error);
     return null;
@@ -28,6 +35,7 @@ async function getQuiz(id: string) {
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
   const { id } = await params;
+  console.log(`Generating metadata for quiz ${id}`);
   const quiz = await getQuiz(id);
   
   if (!quiz) {
@@ -44,8 +52,15 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
 
 export default async function QuizPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
+  console.log(`Rendering quiz page for ID: ${id}`);
   const quiz: QuizDetail | null = await getQuiz(id);
-  if (!quiz) return notFound();
+  
+  if (!quiz) {
+    console.log(`Quiz ${id} not found, returning 404`);
+    return notFound();
+  }
+
+  console.log(`Rendering quiz: ${quiz.title} with ${quiz.questions.length} questions`);
 
   return (
     <main className="min-h-screen bg-gray-50 py-16 px-4 flex flex-col items-center">
