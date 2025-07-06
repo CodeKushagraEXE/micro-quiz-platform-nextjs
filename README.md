@@ -223,7 +223,7 @@ This project was developed with significant assistance from Cursor.ai, demonstra
 
 ## 🚀 Deployment
 
-## Netlify
+   Netlify
 1. Push your code to GitHub
 2. Connect your repository to Netflify
 3. Deploy automatically with zero configuration
