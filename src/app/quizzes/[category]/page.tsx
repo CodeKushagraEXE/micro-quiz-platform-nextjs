@@ -1,6 +1,7 @@
 import QuizCard from '@/components/QuizCard';
 import Head from 'next/head';
 import { notFound } from 'next/navigation';
+import { headers } from 'next/headers';
 
 interface Quiz {
   id: string;
@@ -8,9 +9,17 @@ interface Quiz {
   description: string;
 }
 
+function getBaseUrl() {
+  const headersList = headers();
+  const host = headersList.get('host');
+  const protocol = host && host.includes('localhost') ? 'http' : 'https';
+  return `${protocol}://${host}`;
+}
+
 async function getQuizzes(category: string) {
   try {
-    const res = await fetch(`/api/quizzes/category/${category}`, { cache: 'no-store' });
+    const baseUrl = getBaseUrl();
+    const res = await fetch(`${baseUrl}/api/quizzes/category/${category}`, { cache: 'no-store' });
     if (!res.ok) return null;
     return res.json();
   } catch (error) {

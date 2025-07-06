@@ -1,6 +1,7 @@
 import QuizPlayer from '@/components/QuizPlayer';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
+import { headers } from 'next/headers';
 
 interface QuizDetail {
   id: string;
@@ -8,9 +9,17 @@ interface QuizDetail {
   questions: { question: string; options: string[]; answer: number }[];
 }
 
+function getBaseUrl() {
+  const headersList = headers();
+  const host = headersList.get('host');
+  const protocol = host && host.includes('localhost') ? 'http' : 'https';
+  return `${protocol}://${host}`;
+}
+
 async function getQuiz(id: string) {
   try {
-    const res = await fetch(`/api/quizzes/id/${id}`, { cache: 'no-store' });
+    const baseUrl = getBaseUrl();
+    const res = await fetch(`${baseUrl}/api/quizzes/id/${id}`, { cache: 'no-store' });
     if (!res.ok) {
       return null;
     }

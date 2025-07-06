@@ -1,5 +1,6 @@
 import CategoryCard from '@/components/CategoryCard';
 import Head from 'next/head';
+import { headers } from 'next/headers';
 
 interface Category {
   id: string;
@@ -8,9 +9,17 @@ interface Category {
   quizCount?: number;
 }
 
+function getBaseUrl() {
+  const headersList = headers();
+  const host = headersList.get('host');
+  const protocol = host && host.includes('localhost') ? 'http' : 'https';
+  return `${protocol}://${host}`;
+}
+
 async function getCategoriesWithCounts(): Promise<Category[]> {
   try {
-    const res = await fetch(`/api/categories`, {
+    const baseUrl = getBaseUrl();
+    const res = await fetch(`${baseUrl}/api/categories`, {
       next: { revalidate: 60 },
     });
     if (!res.ok) throw new Error('Failed to fetch categories');
@@ -19,7 +28,7 @@ async function getCategoriesWithCounts(): Promise<Category[]> {
     const quizCounts = await Promise.all(
       categories.map(async (cat: Category) => {
         try {
-          const quizRes = await fetch(`/api/quizzes/category/${cat.id}`);
+          const quizRes = await fetch(`${baseUrl}/api/quizzes/category/${cat.id}`);
           if (!quizRes.ok) return 0;
           const quizzes = await quizRes.json();
           return quizzes.length;
