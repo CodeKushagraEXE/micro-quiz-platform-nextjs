@@ -223,9 +223,9 @@ This project was developed with significant assistance from Cursor.ai, demonstra
 
 ## 🚀 Deployment
 
-### Vercel 
+## Netlify
 1. Push your code to GitHub
-2. Connect your repository to Vercel
+2. Connect your repository to Netflify
 3. Deploy automatically with zero configuration
 
 ## 🙏 Acknowledgments
