@@ -1,35 +1,11 @@
 import QuizCard from '@/components/QuizCard';
 import Head from 'next/head';
 import { notFound } from 'next/navigation';
-
-interface Quiz {
-  id: string;
-  title: string;
-  description: string;
-}
-
-function getBaseUrl() {
-  if (process.env.VERCEL_URL) {
-    return `https://${process.env.VERCEL_URL}`;
-  }
-  return 'http://localhost:3000';
-}
-
-async function getQuizzes(category: string) {
-  try {
-    const baseUrl = getBaseUrl();
-    const res = await fetch(`${baseUrl}/api/quizzes/category/${category}`, { cache: 'no-store' });
-    if (!res.ok) return null;
-    return res.json();
-  } catch (error) {
-    console.error(`Failed to fetch quizzes for category ${category}:`, error);
-    return null;
-  }
-}
+import { quizzesByCategory } from '@/data/quizzes';
 
 export default async function CategoryPage({ params }: { params: Promise<{ category: string }> }) {
   const { category } = await params;
-  const quizzes: Quiz[] | null = await getQuizzes(category);
+  const quizzes = quizzesByCategory[category] || null;
   if (!quizzes) return notFound();
 
   return (

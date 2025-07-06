@@ -1,45 +1,16 @@
 import QuizPlayer from '@/components/QuizPlayer';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
-
-interface QuizDetail {
-  id: string;
-  title: string;
-  questions: { question: string; options: string[]; answer: number }[];
-}
-
-function getBaseUrl() {
-  if (process.env.VERCEL_URL) {
-    return `https://${process.env.VERCEL_URL}`;
-  }
-  return 'http://localhost:3000';
-}
-
-async function getQuiz(id: string) {
-  try {
-    const baseUrl = getBaseUrl();
-    const res = await fetch(`${baseUrl}/api/quizzes/id/${id}`, { cache: 'no-store' });
-    if (!res.ok) {
-      return null;
-    }
-    const quiz = await res.json();
-    return quiz;
-  } catch (error) {
-    console.error(`Failed to fetch quiz ${id}:`, error);
-    return null;
-  }
-}
+import { quizDetails } from '@/data/quizzes';
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
   const { id } = await params;
-  const quiz = await getQuiz(id);
-  
+  const quiz = quizDetails[id];
   if (!quiz) {
     return {
       title: 'Quiz Not Found | Micro-Quiz Platform',
     };
   }
-
   return {
     title: `${quiz.title} | Micro-Quiz Platform`,
     description: `Take the quiz: ${quiz.title}`,
@@ -48,11 +19,8 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
 
 export default async function QuizPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const quiz: QuizDetail | null = await getQuiz(id);
-  
-  if (!quiz) {
-    return notFound();
-  }
+  const quiz = quizDetails[id] || null;
+  if (!quiz) return notFound();
 
   return (
     <main className="min-h-screen bg-gray-50 py-16 px-4 flex flex-col items-center">
