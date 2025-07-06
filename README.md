@@ -223,36 +223,10 @@ This project was developed with significant assistance from Cursor.ai, demonstra
 
 ## 🚀 Deployment
 
-### Vercel (Recommended)
+### Vercel 
 1. Push your code to GitHub
 2. Connect your repository to Vercel
 3. Deploy automatically with zero configuration
-
-### Other Platforms
-The project is compatible with any platform that supports Next.js:
-- Netlify
-- Railway
-- DigitalOcean App Platform
-- AWS Amplify
-
-## 📝 Available Scripts
-
-- `npm run dev` - Start development server
-- `npm run build` - Build for production
-- `npm run start` - Start production server
-- `npm run lint` - Run ESLint
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-## 📄 License
-
-This project is open source and available under the [MIT License](LICENSE).
 
 ## 🙏 Acknowledgments
 
