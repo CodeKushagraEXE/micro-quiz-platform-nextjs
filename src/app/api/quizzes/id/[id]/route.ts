@@ -1,6 +1,18 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-const quizDetails: Record<string, any> = {
+interface Question {
+  question: string;
+  options: string[];
+  answer: number;
+}
+
+interface QuizDetail {
+  id: string;
+  title: string;
+  questions: Question[];
+}
+
+const quizDetails: Record<string, QuizDetail> = {
   h1: {
     id: 'h1',
     title: 'World War II Basics',

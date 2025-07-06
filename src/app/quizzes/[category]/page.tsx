@@ -8,10 +8,6 @@ interface Quiz {
   description: string;
 }
 
-interface CategoryPageProps {
-  params: { category: string };
-}
-
 function getBaseUrl() {
   if (typeof window !== 'undefined') return '';
   if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`;
@@ -19,10 +15,15 @@ function getBaseUrl() {
 }
 
 async function getQuizzes(category: string) {
-  const baseUrl = getBaseUrl();
-  const res = await fetch(`${baseUrl}/api/quizzes/category/${category}`, { cache: 'no-store' });
-  if (!res.ok) return null;
-  return res.json();
+  try {
+    const baseUrl = getBaseUrl();
+    const res = await fetch(`${baseUrl}/api/quizzes/category/${category}`, { cache: 'no-store' });
+    if (!res.ok) return null;
+    return res.json();
+  } catch (error) {
+    console.error(`Failed to fetch quizzes for category ${category}:`, error);
+    return null;
+  }
 }
 
 export default async function CategoryPage({ params }: { params: Promise<{ category: string }> }) {

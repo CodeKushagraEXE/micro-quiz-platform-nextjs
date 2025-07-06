@@ -1,29 +1,52 @@
 import CategoryCard from '@/components/CategoryCard';
 import Head from 'next/head';
 
+interface Category {
+  id: string;
+  name: string;
+  icon: string;
+  quizCount?: number;
+}
+
 function getBaseUrl() {
   if (typeof window !== 'undefined') return '';
   if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`;
   return 'http://localhost:3000';
 }
 
-async function getCategoriesWithCounts() {
-  const baseUrl = getBaseUrl();
-  const res = await fetch(`${baseUrl}/api/categories`, {
-    next: { revalidate: 60 },
-  });
-  if (!res.ok) throw new Error('Failed to fetch categories');
-  const categories = await res.json();
-  // Fetch quiz counts for each category
-  const quizCounts = await Promise.all(
-    categories.map(async (cat: any) => {
-      const quizRes = await fetch(`${baseUrl}/api/quizzes/category/${cat.id}`);
-      if (!quizRes.ok) return 0;
-      const quizzes = await quizRes.json();
-      return quizzes.length;
-    })
-  );
-  return categories.map((cat: any, i: number) => ({ ...cat, quizCount: quizCounts[i] }));
+async function getCategoriesWithCounts(): Promise<Category[]> {
+  try {
+    const baseUrl = getBaseUrl();
+    const res = await fetch(`${baseUrl}/api/categories`, {
+      next: { revalidate: 60 },
+    });
+    if (!res.ok) throw new Error('Failed to fetch categories');
+    const categories: Category[] = await res.json();
+    // Fetch quiz counts for each category
+    const quizCounts = await Promise.all(
+      categories.map(async (cat: Category) => {
+        try {
+          const quizRes = await fetch(`${baseUrl}/api/quizzes/category/${cat.id}`);
+          if (!quizRes.ok) return 0;
+          const quizzes = await quizRes.json();
+          return quizzes.length;
+        } catch (error) {
+          console.error(`Failed to fetch quiz count for category ${cat.id}:`, error);
+          return 0;
+        }
+      })
+    );
+    return categories.map((cat: Category, i: number) => ({ ...cat, quizCount: quizCounts[i] }));
+  } catch (error) {
+    console.error('Failed to fetch categories:', error);
+    // Return default categories if API is not available
+    return [
+      { id: 'history', name: 'History', icon: '⏳', quizCount: 2 },
+      { id: 'science', name: 'Science', icon: '🔬', quizCount: 2 },
+      { id: 'math', name: 'Math', icon: '🧮', quizCount: 2 },
+      { id: 'programming', name: 'Programming', icon: '💻', quizCount: 2 },
+    ];
+  }
 }
 
 export default async function Home() {
@@ -41,7 +64,7 @@ export default async function Home() {
           <p className="text-xl text-gray-600 font-medium">Choose a category to get started!</p>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-10 w-full max-w-4xl mx-auto">
-          {categories.map((cat: any) => (
+          {categories.map((cat: Category) => (
             <CategoryCard key={cat.id} {...cat} />
           ))}
         </div>
