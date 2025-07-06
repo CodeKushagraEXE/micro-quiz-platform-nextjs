@@ -1,7 +1,11 @@
 import QuizCard from '@/components/QuizCard';
 import Head from 'next/head';
 import { notFound } from 'next/navigation';
-import { quizzesByCategory } from '@/data/quizzes';
+import { quizzesByCategory, categories } from '@/data/quizzes';
+
+export async function generateStaticParams() {
+  return categories.map(cat => ({ category: cat.id }));
+}
 
 export default async function CategoryPage({ params }: { params: Promise<{ category: string }> }) {
   const { category } = await params;
