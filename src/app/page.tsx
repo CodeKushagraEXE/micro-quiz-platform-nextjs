@@ -1,6 +1,5 @@
 import CategoryCard from '@/components/CategoryCard';
 import Head from 'next/head';
-import { headers } from 'next/headers';
 
 interface Category {
   id: string;
@@ -10,10 +9,10 @@ interface Category {
 }
 
 function getBaseUrl() {
-  const headersList = headers();
-  const host = headersList.get('host');
-  const protocol = host && host.includes('localhost') ? 'http' : 'https';
-  return `${protocol}://${host}`;
+  if (process.env.VERCEL_URL) {
+    return `https://${process.env.VERCEL_URL}`;
+  }
+  return 'http://localhost:3000';
 }
 
 async function getCategoriesWithCounts(): Promise<Category[]> {

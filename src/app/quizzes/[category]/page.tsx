@@ -1,7 +1,6 @@
 import QuizCard from '@/components/QuizCard';
 import Head from 'next/head';
 import { notFound } from 'next/navigation';
-import { headers } from 'next/headers';
 
 interface Quiz {
   id: string;
@@ -10,10 +9,10 @@ interface Quiz {
 }
 
 function getBaseUrl() {
-  const headersList = headers();
-  const host = headersList.get('host');
-  const protocol = host && host.includes('localhost') ? 'http' : 'https';
-  return `${protocol}://${host}`;
+  if (process.env.VERCEL_URL) {
+    return `https://${process.env.VERCEL_URL}`;
+  }
+  return 'http://localhost:3000';
 }
 
 async function getQuizzes(category: string) {

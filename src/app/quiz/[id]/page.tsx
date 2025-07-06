@@ -1,7 +1,6 @@
 import QuizPlayer from '@/components/QuizPlayer';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
-import { headers } from 'next/headers';
 
 interface QuizDetail {
   id: string;
@@ -10,10 +9,10 @@ interface QuizDetail {
 }
 
 function getBaseUrl() {
-  const headersList = headers();
-  const host = headersList.get('host');
-  const protocol = host && host.includes('localhost') ? 'http' : 'https';
-  return `${protocol}://${host}`;
+  if (process.env.VERCEL_URL) {
+    return `https://${process.env.VERCEL_URL}`;
+  }
+  return 'http://localhost:3000';
 }
 
 async function getQuiz(id: string) {
